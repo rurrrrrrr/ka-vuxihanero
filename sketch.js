@@ -13,10 +13,11 @@ let jumpUnlimitedUntil;
 let cheatInput = "";
 let invincible = false;
 const cheatCode = "nitijixyousai";
+const fastFallGravity = 2;
 function setup() {
-    createCanvas(1000, 400);
+    createCanvas(1000, 500);
     angleMode(DEGREES);
-    gravity = 10;
+    gravity = 0.5;
     baseline = height - 10;
     initGame();
 }
@@ -112,6 +113,9 @@ function drawPlayer() {
 function updatePlayer() {
     player.angle = player.angle + 10;
     player.speedY = player.speedY + gravity;
+    if (keyIsDown(16) && player.speedY > 0) {
+        player.speedY = player.speedY + fastFallGravity;
+    }
     player.y = player.y + player.speedY;
     if (player.y >= baseline - player.radius) {
         player.y = baseline - player.radius;
@@ -121,7 +125,7 @@ function updatePlayer() {
 }
 function playerJump() {
     if (millis() < jumpUnlimitedUntil || player.jumpCount > 0) {
-        player.speedY = -50;
+        player.speedY = -20;
         if (millis() >= jumpUnlimitedUntil) {
             player.jumpCount = player.jumpCount - 1;
         }
@@ -140,10 +144,10 @@ function addBalls() {
         lastBallTime = millis();
         balls.push({
             x: width + 50,
-            y: baseline - 150,
+            y: random(height / 2, baseline - 30),
             radius: 30,
-            speedX: 20,
-            speedY: 5,
+            speedX: 14,
+            speedY: 10,
             angle: 0,
         });
     }
